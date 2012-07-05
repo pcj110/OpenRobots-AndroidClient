@@ -1,0 +1,3 @@
+[submodule "liblinphone-android"]
+	path = liblinphone-android
+	url = git://git.linphone.org/linphone-android.git

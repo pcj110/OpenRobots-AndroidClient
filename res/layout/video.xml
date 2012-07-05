@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+    
+    <org.linphone.mediastream.video.display.GL2JNIView 
+        android:visibility="visible" 
+        android:layout_height="match_parent" 
+        android:layout_width="match_parent" 
+        android:id="@+id/videoSurface" />
+    
+    <SurfaceView 
+		android:layout_height="88dip" 
+		android:layout_width="72dip" 
+		android:id="@+id/videoPreviewSurface" 
+		android:layout_alignParentBottom="true"
+		android:layout_alignParentRight="true"
+		android:layout_marginBottom="15dip"
+		android:layout_marginRight="15dip" />
+    
+    <RelativeLayout
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:layout_alignParentLeft="true" >
+        
+	    <ImageView 
+	        android:layout_height="48dp" 
+	        android:layout_width="48dp"
+	        android:padding="5dp"
+	        android:id="@+id/back"
+	        android:src="@drawable/back"
+	        android:layout_alignParentBottom="true"
+	        android:layout_centerHorizontal="true" />
+	    
+	    <ImageView 
+	        android:layout_height="48dp" 
+	        android:layout_width="48dp"
+	        android:padding="5dp"
+	        android:id="@+id/rotateLeft"
+	        android:src="@drawable/left"
+	        android:layout_above="@id/back"
+	        android:layout_alignParentLeft="true" />
+	    
+	    <ImageView 
+	        android:layout_height="48dp" 
+	        android:layout_width="48dp"
+	        android:padding="5dp"
+	        android:id="@+id/stop"
+	        android:src="@drawable/stop"
+	        android:layout_above="@id/back"
+	        android:layout_toRightOf="@id/rotateLeft" />
+	    
+	    <ImageView 
+	        android:layout_height="48dp" 
+	        android:layout_width="48dp"
+	        android:padding="5dp"
+	        android:id="@+id/rotateRight"
+	        android:src="@drawable/right"
+	        android:layout_above="@id/back"
+	        android:layout_toRightOf="@id/stop" />
+	    
+	    <ImageView 
+	        android:layout_height="48dp" 
+	        android:layout_width="48dp"
+	        android:padding="5dp"
+	        android:id="@+id/forward"
+	        android:src="@drawable/forward"
+	        android:layout_above="@id/stop"
+	        android:layout_centerHorizontal="true" />
+    
+    </RelativeLayout>
+
+</RelativeLayout>

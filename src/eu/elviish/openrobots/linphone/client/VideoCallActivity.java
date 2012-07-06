@@ -62,8 +62,15 @@ public class VideoCallActivity extends Activity implements LinphoneOnCallStateCh
 		adapterSIPAddress = prefs.getString(getString(R.string.pref_adapter_ip_key), null);
 				
 		mVideoView = (SurfaceView) findViewById(R.id.videoSurface);
+		
 		SurfaceView captureView = (SurfaceView) findViewById(R.id.videoPreviewSurface);
 		captureView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+		captureView.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				switchCamera();
+			}
+		});
 		
 		fixZOrder(mVideoView, captureView);
 		
@@ -97,14 +104,6 @@ public class VideoCallActivity extends Activity implements LinphoneOnCallStateCh
 		mWakeLock = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ON_AFTER_RELEASE, Log.TAG);
 		mWakeLock.acquire();
 		
-		// Force front camera if available
-		int videoDeviceId = LinphoneManager.getLc().getVideoDevice();
-		videoDeviceId = (videoDeviceId + 1) % AndroidCameraConfiguration.retrieveCameras().length;
-		LinphoneManager.getLc().setVideoDevice(videoDeviceId);
-		CallManager.getInstance().updateCall();
-		if (mPreviewVideoView != null)
-			LinphoneManager.getLc().setPreviewWindow(mPreviewVideoView);
-		
 		initChatRoom();
 		initLayout();
 	}
@@ -113,6 +112,15 @@ public class VideoCallActivity extends Activity implements LinphoneOnCallStateCh
 		LinphoneCore lc = LinphoneManager.getLcIfManagerNotDestroyedOrNull();
 		if (adapterSIPAddress != null && lc != null)
 			chatRoom = lc.createChatRoom(adapterSIPAddress);
+	}
+	
+	private void switchCamera() {
+		int videoDeviceId = LinphoneManager.getLc().getVideoDevice();
+		videoDeviceId = (videoDeviceId + 1) % AndroidCameraConfiguration.retrieveCameras().length;
+		LinphoneManager.getLc().setVideoDevice(videoDeviceId);
+		CallManager.getInstance().updateCall();
+		if (mPreviewVideoView != null)
+			LinphoneManager.getLc().setPreviewWindow(mPreviewVideoView);
 	}
 	
 	private void initLayout() {
@@ -224,8 +232,10 @@ public class VideoCallActivity extends Activity implements LinphoneOnCallStateCh
 			}
 		}		
 		
-		startVideoCall(LinphoneManager.getLc());
-		LinphoneManager.getLc().getCurrentCall().enableCamera(true);
+		if (LinphoneManager.getLc().getCallsNb() == 0) {
+			startVideoCall(LinphoneManager.getLc());
+			LinphoneManager.getLc().getCurrentCall().enableCamera(true);
+		}
 	}
 	
 	@Override
@@ -255,6 +265,7 @@ public class VideoCallActivity extends Activity implements LinphoneOnCallStateCh
 		if (mVideoView != null)
 			((GLSurfaceView) mVideoView).onPause();
 		
-		terminateVideoCall(LinphoneManager.getLc());
+		if (isFinishing())
+			terminateVideoCall(LinphoneManager.getLc());
 	}
 }
